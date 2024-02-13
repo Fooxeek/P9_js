@@ -21,11 +21,14 @@ const row = (bill) => {
 };
 
 const rows = (data) => {
-  return data && data.length
-    ? sortByDate(data)
-        .map((bill) => row(bill))
-        .join("")
-    : "";
+  const toto =
+    data && data.length
+      ? sortByDate(data)
+          .map((bill) => row(bill))
+          .join("")
+      : "";
+  console.log(toto);
+  return toto;
 };
 
 export default ({ data: bills, loading, error }) => {

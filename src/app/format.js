@@ -24,7 +24,6 @@ export const sortByDate = (bills) => {
     const dateB = new Date(b.date);
     if (dateA > dateB) return -1;
     if (dateA < dateB) return 1;
-    return 0;
   });
   return bills;
 };
