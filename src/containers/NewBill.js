@@ -21,18 +21,19 @@ export default class NewBill {
     e.preventDefault();
     const file = this.document.querySelector(`input[data-testid="file"]`)
       .files[0];
-    const filePath = e.target.value.split(/\\/g);
-    const fileName = filePath[filePath.length - 1];
-    const formData = new FormData();
+    const fileName = file.name;
     const fileExtension = fileName.split(".").pop();
-    const validExtensions = ["jpg", "jpeg", "png"];
+    const validExtensions = ["jpg", "jpeg", "png", "PNG"];
 
     if (!validExtensions.includes(fileExtension)) {
       e.target.value = null;
+
       alert("Veuillez sélectionner un fichier au format jpg, jpeg ou png");
       return;
     }
+
     const email = JSON.parse(localStorage.getItem("user")).email;
+    const formData = new FormData();
     formData.append("file", file);
     formData.append("email", email);
 
@@ -45,7 +46,6 @@ export default class NewBill {
         },
       })
       .then(({ fileUrl, key }) => {
-        console.log(fileUrl);
         this.billId = key;
         this.fileUrl = fileUrl;
         this.fileName = fileName;
@@ -54,10 +54,6 @@ export default class NewBill {
   };
   handleSubmit = (e) => {
     e.preventDefault();
-    console.log(
-      'e.target.querySelector(`input[data-testid="datepicker"]`).value',
-      e.target.querySelector(`input[data-testid="datepicker"]`).value
-    );
     const email = JSON.parse(localStorage.getItem("user")).email;
     const bill = {
       email,
@@ -77,6 +73,9 @@ export default class NewBill {
       fileName: this.fileName,
       status: "pending",
     };
+
+    console.log(bill);
+
     this.updateBill(bill);
     this.onNavigate(ROUTES_PATH["Bills"]);
   };
@@ -84,6 +83,7 @@ export default class NewBill {
   // not need to cover this function by tests
   updateBill = (bill) => {
     if (this.store) {
+      console.log(bill);
       this.store
         .bills()
         .update({ data: JSON.stringify(bill), selector: this.billId })
